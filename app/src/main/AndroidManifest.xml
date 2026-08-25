@@ -12,25 +12,20 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
 
-        <!-- Pixel Home Screen Widget Receiver -->
+        <!-- Widget Provider Receiver -->
         <receiver
             android:name=".AlphabetWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.starlauncher.ACTION_LETTER_TOUCHED" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/alphabet_widget_info" />
         </receiver>
 
-        <!-- Remote List Engine for the letters -->
-        <service
-            android:name=".AlphabetWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:exported="false" />
-
-        <!-- Pristine Floating White Paper Square Dialog -->
+        <!-- Floating Paper Square Modal -->
         <activity
             android:name=".SketchbookModalActivity"
             android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar"
