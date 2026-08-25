@@ -21,16 +21,16 @@ class SketchbookModalActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Floating Paper Square Dimensions
+        val displayMetrics = resources.displayMetrics
         window.setLayout(
-            (resources.displayMetrics.widthPixels * 0.86).toInt(),
-            (resources.displayMetrics.heightPixels * 0.58).toInt()
+            (displayMetrics.widthPixels * 0.88).toInt(),
+            (displayMetrics.heightPixels * 0.62).toInt()
         )
         window.setGravity(Gravity.CENTER)
         window.setBackgroundDrawableResource(android.R.color.transparent)
         window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-        window.attributes.dimAmount = 0.40f
-        setFinishOnTouchOutside(true) // Instant touch-off dismissal
+        window.attributes.dimAmount = 0.45f
+        setFinishOnTouchOutside(true)
 
         val selectedChar = intent.getStringExtra("EXTRA_FILTER_LETTER") ?: "•"
         val apps = loadInstalledApps()
@@ -40,31 +40,31 @@ class SketchbookModalActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             background = GradientDrawable().apply {
                 setColor(Color.parseColor("#FAFBFD"))
-                cornerRadius = 36f
-                setStroke(2, Color.parseColor("#26111113"))
+                cornerRadius = 38f
+                setStroke(3, Color.parseColor("#26111113"))
             }
-            elevation = 42f
+            elevation = 50f
             setPadding(32, 28, 32, 28)
         }
 
         val headerRow = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            setPadding(8, 4, 8, 16)
+            setPadding(8, 4, 8, 18)
         }
 
         val title = TextView(this).apply {
-            text = if (selectedChar == "•") "ALL APPLICATIONS" else "APPLICATIONS [$selectedChar]"
+            text = if (selectedChar == "•") "ALL APPLICATIONS" else "INDEX [$selectedChar]"
             setTextColor(Color.parseColor("#111113"))
-            textSize = 14f
+            textSize = 15f
             letterSpacing = 0.12f
-            typeface = Typeface.MONOSPACE
+            typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
             layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
         }
         val closeBtn = TextView(this).apply {
-            text = "[ TAP OFF ]"
+            text = "[ DISMISS ]"
             setTextColor(Color.parseColor("#71717A"))
-            textSize = 11f
+            textSize = 11.5f
             typeface = Typeface.MONOSPACE
             setOnClickListener { finish() }
         }
@@ -84,11 +84,11 @@ class SketchbookModalActivity : Activity() {
 
         if (filtered.isEmpty()) {
             val emptyTv = TextView(this).apply {
-                text = "No tools starting with '$selectedChar'"
+                text = "No applications under '$selectedChar'"
                 setTextColor(Color.parseColor("#71717A"))
-                textSize = 13f
+                textSize = 13.5f
                 typeface = Typeface.MONOSPACE
-                setPadding(12, 32, 0, 0)
+                setPadding(12, 40, 0, 0)
             }
             listContainer.addView(emptyTv)
         } else {
@@ -96,22 +96,22 @@ class SketchbookModalActivity : Activity() {
                 val row = LinearLayout(this).apply {
                     orientation = LinearLayout.HORIZONTAL
                     gravity = Gravity.CENTER_VERTICAL
-                    setPadding(12, 12, 12, 12)
+                    setPadding(12, 14, 12, 14)
                     isClickable = true
                     isFocusable = true
                 }
 
                 val iv = ImageView(this).apply {
                     setImageDrawable(app.icon)
-                    val size = 88
-                    layoutParams = LinearLayout.LayoutParams(size, size).apply { setMargins(0, 0, 18, 0) }
+                    val size = 96
+                    layoutParams = LinearLayout.LayoutParams(size, size).apply { setMargins(0, 0, 20, 0) }
                 }
                 row.addView(iv)
 
                 val name = TextView(this).apply {
                     text = app.name
                     setTextColor(Color.parseColor("#111113"))
-                    textSize = 15f
+                    textSize = 16f
                     typeface = Typeface.DEFAULT_BOLD
                 }
                 row.addView(name)
