@@ -25,9 +25,10 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: 8.6
+          cache-disabled: true
 
       - name: Build Debug APK
-        run: gradle assembleDebug --stacktrace
+        run: gradle assembleDebug -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true --stacktrace
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -35,4 +36,3 @@ jobs:
           name: Alphabet-Codex-Debug
           path: app/build/outputs/apk/debug/*.apk
           retention-days: 7
-
