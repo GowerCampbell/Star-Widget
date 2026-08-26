@@ -18,14 +18,19 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.example.starlauncher.ACTION_LETTER_TOUCHED" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/alphabet_widget_info" />
         </receiver>
 
-        <!-- Floating Paper Square Modal -->
+        <!-- Remote Service supplying individual clickable letters -->
+        <service
+            android:name=".AlphabetWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false" />
+
+        <!-- Floating Sketchbook Codex Dialog -->
         <activity
             android:name=".SketchbookModalActivity"
             android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar"
