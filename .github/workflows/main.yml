@@ -36,3 +36,4 @@ jobs:
           name: Alphabet-Codex-Debug
           path: app/build/outputs/apk/debug/*.apk
           retention-days: 7
+
