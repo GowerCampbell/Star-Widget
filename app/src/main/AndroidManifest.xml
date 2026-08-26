@@ -18,6 +18,9 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
@@ -33,8 +36,9 @@
         <!-- Floating Sketchbook Codex Dialog -->
         <activity
             android:name=".SketchbookModalActivity"
+            android:launchMode="singleTask"
             android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar"
-            android:exported="false" />
+            android:exported="true" />
 
     </application>
 
