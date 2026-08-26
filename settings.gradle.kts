@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Star-Launcher"
+rootProject.name = "Star-Widget"
 include(":app")
