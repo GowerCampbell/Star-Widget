@@ -19,7 +19,7 @@ class AlphabetWidgetProvider : AppWidgetProvider() {
         for (widgetId in appWidgetIds) {
             val serviceIntent = Intent(context, AlphabetWidgetService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-                data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
+                data = Uri.parse("starwidget://widget/id/$widgetId")
             }
 
             val views = RemoteViews(context.packageName, R.layout.widget_alphabet_sketchbook).apply {
@@ -27,30 +27,31 @@ class AlphabetWidgetProvider : AppWidgetProvider() {
             }
 
             val clickIntent = Intent(context, SketchbookModalActivity::class.java).apply {
+                action = Intent.ACTION_VIEW
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
+
             val clickPendingIntent = PendingIntent.getActivity(
                 context,
-                0,
+                widgetId,
                 clickIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
             )
+
             views.setPendingIntentTemplate(R.id.alphabet_list_view, clickPendingIntent)
 
             appWidgetManager.updateAppWidget(widgetId, views)
+            appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.alphabet_list_view)
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == Intent.ACTION_PACKAGE_ADDED ||
-            intent.action == Intent.ACTION_PACKAGE_REMOVED ||
-            intent.action == Intent.ACTION_PACKAGE_CHANGED
-        ) {
-            val appWidgetManager = AppWidgetManager.getInstance(context)
-            val componentName = ComponentName(context, AlphabetWidgetProvider::class.java)
-            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        val componentName = ComponentName(context, AlphabetWidgetProvider::class.java)
+        val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+        if (appWidgetIds.isNotEmpty()) {
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.alphabet_list_view)
         }
     }
