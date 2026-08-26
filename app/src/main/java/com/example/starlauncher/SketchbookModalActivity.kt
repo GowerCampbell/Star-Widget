@@ -154,3 +154,4 @@ class SketchbookModalActivity : Activity() {
         return list.sortedBy { it.name.lowercase() }
     }
 }
+
