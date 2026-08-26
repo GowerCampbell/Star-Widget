@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 
@@ -62,13 +61,12 @@ class AlphabetRemoteViewsFactory(private val context: Context) : RemoteViewsServ
         val letter = activeLetters[position]
         val views = RemoteViews(context.packageName, R.layout.item_alphabet_letter)
 
-        views.setTextViewText(R.id.letter_text, letter)
-        views.setViewVisibility(R.id.letter_pointer, View.VISIBLE)
+        views.setTextViewText(R.id.letter_text, if (letter == "•") "•" else "▸ $letter")
 
         val fillInIntent = Intent().apply {
             putExtra("EXTRA_FILTER_LETTER", letter)
         }
-        views.setOnClickFillInIntent(R.id.letter_row, fillInIntent)
+        views.setOnClickFillInIntent(R.id.letter_text, fillInIntent)
         return views
     }
 
