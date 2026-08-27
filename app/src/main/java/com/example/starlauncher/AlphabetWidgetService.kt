@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 
@@ -21,6 +22,7 @@ class AlphabetRemoteViewsFactory(private val context: Context) : RemoteViewsServ
         loadLetters()
     }
 
+    // Android runs onDataSetChanged() on a background binder thread automatically
     override fun onDataSetChanged() {
         loadLetters()
     }
@@ -53,20 +55,25 @@ class AlphabetRemoteViewsFactory(private val context: Context) : RemoteViewsServ
         activeLetters = list
     }
 
-    override fun onDestroy() {}
+    override fun onDestroy() {
+        activeLetters = emptyList()
+    }
 
     override fun getCount(): Int = activeLetters.size
 
     override fun getViewAt(position: Int): RemoteViews {
-        val letter = activeLetters[position]
         val views = RemoteViews(context.packageName, R.layout.item_alphabet_letter)
+        val letter = activeLetters.getOrNull(position) ?: return views
 
-        views.setTextViewText(R.id.letter_text, if (letter == "•") "•" else "▸ $letter")
+        views.setTextViewText(R.id.letter_text, letter)
+        views.setViewVisibility(R.id.letter_pointer, View.GONE)
 
+        // Attach click payload directly to the root container (letter_row)
         val fillInIntent = Intent().apply {
             putExtra("EXTRA_FILTER_LETTER", letter)
         }
-        views.setOnClickFillInIntent(R.id.letter_text, fillInIntent)
+        views.setOnClickFillInIntent(R.id.letter_row, fillInIntent)
+
         return views
     }
 
